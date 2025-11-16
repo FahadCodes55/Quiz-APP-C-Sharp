@@ -1,0 +1,706 @@
+﻿@{
+    ViewData["Title"] = "Quiz";
+    Layout = null;
+}
+
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+       body{
+        background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),url("https://cdn.pixabay.com/photo/2015/12/13/09/40/banner-1090829_1280.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size:cover;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+
+        .navbar {
+        background: #333;
+        backdrop-filter: blur(8px); /* Blur effect */
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        position: sticky; /* Sticky nav bar */
+        top: 0;
+        width: 100%;
+        z-index: 1000; /* Ensure it stays on top */
+    }
+
+        .navbar .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff; /* Light blue */
+            text-shadow: 0 1px 4px rgba(6, 182, 212, 0.5);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            .navbar .logo:hover {
+                color: whitesmoke;
+                 /* Brighter white on hover */
+            }
+
+        .navbar .nav-links {
+            display: flex;
+            gap: 1.5rem; /* Space between links */
+        }
+
+            .navbar .nav-links a {
+                color: #fff; /* Lighter blue for links */
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 15px;
+                padding: 0.5rem 0.8rem;
+                border-radius: 8px;
+                transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+            }
+
+                .navbar .nav-links a:hover {
+                    background-color: white; /* Slightly darker transparent background */
+                    color: #000;
+                    transform: translateY(-2px); /* Slight lift */
+                }
+
+    .quiz-container {
+        background-color: #222;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        max-width: 700px;
+        width: 100%;
+        padding: 30px;
+        box-sizing: border-box;
+        margin-left: 290px;
+        margin-top: 20px;
+
+    }
+
+    .question-section {
+        display: none;
+    }
+
+        .question-section.active {
+            display: block;
+        }
+
+    .question-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #fff;
+    }
+
+    .options-container label {
+        display: block;
+        background-color: #f7f7f7;
+        padding: 10px 20px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+        border: 1px solid #e0e0e0;
+        display: flex;
+        align-items: center;
+    }
+
+        .options-container label:hover {
+            background-color: #e9e9e9;
+            border-color: #d0d0d0;
+        }
+
+    .options-container input[type="radio"] {
+        margin-right: 15px;
+        transform: scale(1.2);
+        accent-color: #4f46e5;
+    }
+
+        .options-container input[type="radio"]:checked + span {
+            font-weight: 500;
+            color: #4f46e5;
+        }
+
+    .navigation-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+
+        .navigation-buttons button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+            .navigation-buttons button:hover {
+                transform: translateY(-2px);
+            }
+
+            .navigation-buttons button:active {
+                transform: translateY(0);
+            }
+
+            .navigation-buttons button:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+    .btn-primary {
+        background-color: #000;
+        color: #ffffff;
+    }
+
+        .btn-primary:hover {
+            background-color: #fff;
+            color: #000;
+        }
+
+    .btn-secondary {
+        background-color: #e0e7ff;
+        color: #000;
+    }
+
+        .btn-secondary:hover {
+            background-color: #000;
+            color:#fff;
+        }
+
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+    .modal-content {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        transform: translateY(-20px);
+        transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.show .modal-content {
+        transform: translateY(0);
+    }
+
+    .modal-content h3 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #dc2626;
+        margin-bottom: 15px;
+    }
+
+    .modal-content p {
+        font-size: 1.1rem;
+        color: #444;
+        margin-bottom: 25px;
+    }
+
+    .modal-content button {
+        background-color: #4f46e5;
+        color: #ffffff;
+        padding: 10px 25px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+        .modal-content button:hover {
+            background-color: #4338ca;
+        }
+
+    .timer-styles {
+        margin-top: 20px;
+        background-color: #000;
+        color: #ffffff;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 200px;
+        text-align: center;
+        margin-bottom: 20px;
+        margin-left: 530px;
+    }
+</style>
+
+
+<nav class="navbar">
+    <a class="logo" asp-area="" asp-controller="Home" asp-action="Index">SmartQuiz APP</a>
+    <div class="nav-links">
+        <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+        <a asp-area="" asp-controller="Home" asp-action="privacy">Privacy</a>
+        <a asp-area="" asp-controller="User" asp-action="Login">Login</a>
+        <a asp-area="" asp-controller="User" asp-action="Signup">Sign Up</a>
+    </div>
+</nav>
+
+<body class="font-inter">
+    <div id="timer" class="timer-styles" style="font-weight:bold; font-size:18px;">Time Left: <span id="time">60</span> seconds</div>
+    <div class="quiz-container">
+        <div id="quiz-questions-area">
+            <div id="question-1" class="question-section active">
+                <h3 class="question-title">1. What is 15 multiplied by 8?</h3>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="q1" value="a">
+                        <span>a) 100</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q1" value="b">
+                        <span>b) 110</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q1" value="c">
+                        <span>c) 120</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q1" value="d">
+                        <span>d) 130</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="question-2" class="question-section">
+                <h3 class="question-title">2. Which of the following is a synonym for 'ubiquitous'?</h3>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="q2" value="a">
+                        <span>a) Scarce</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q2" value="b">
+                        <span>b) Rare</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q2" value="c">
+                        <span>c) Pervasive</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q2" value="d">
+                        <span>d) Limited</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="question-3" class="question-section">
+                <h3 class="question-title">3. If a shirt costs $25 and is on sale for 20% off, what is the sale price?</h3>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="q3" value="a">
+                        <span>a) $18</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q3" value="b">
+                        <span>b) $20</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q3" value="c">
+                        <span>c) $22</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q3" value="d">
+                        <span>d) $15</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="question-4" class="question-section">
+                <h3 class="question-title">4. Identify the adverb in the following sentence: "She sings beautifully."</h3>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="q4" value="a">
+                        <span>a) She</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q4" value="b">
+                        <span>b) Sings</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q4" value="c">
+                        <span>c) Beautifully</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q4" value="d">
+                        <span>d) None of the above</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="question-5" class="question-section">
+                <h3 class="question-title">5. What is the area of a rectangle with length 12 cm and width 5 cm?</h3>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="q5" value="a">
+                        <span>a) 17 cm²</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q5" value="b">
+                        <span>b) 34 cm²</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q5" value="c">
+                        <span>c) 60 cm²</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q5" value="d">
+                        <span>d) 24 cm²</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="question-6" class="question-section">
+                <h3 class="question-title">6. Complete the sentence: "I ____ to the store yesterday."</h3>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="q6" value="a">
+                        <span>a) go</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q6" value="b">
+                        <span>b) going</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q6" value="c">
+                        <span>c) went</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q6" value="d">
+                        <span>d) gone</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="question-7" class="question-section">
+                <h3 class="question-title">7. Solve for x: 2x + 5 = 15</h3>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="q7" value="a">
+                        <span>a) x = 5</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q7" value="b">
+                        <span>b) x = 7</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q7" value="c">
+                        <span>c) x = 10</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q7" value="d">
+                        <span>d) x = 20</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="question-8" class="question-section">
+                <h3 class="question-title">8. Which of these is a proper noun?</h3>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="q8" value="a">
+                        <span>a) river</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q8" value="b">
+                        <span>b) city</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q8" value="c">
+                        <span>c) Amazon</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q8" value="d">
+                        <span>d) dog</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="question-9" class="question-section">
+                <h3 class="question-title">9. What is the square root of 81?</h3>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="q9" value="a">
+                        <span>a) 7</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q9" value="b">
+                        <span>b) 8</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q9" value="c">
+                        <span>c) 9</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q9" value="d">
+                        <span>d) 10</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="question-10" class="question-section">
+                <h3 class="question-title">10. Choose the correct spelling:</h3>
+                <div class="options-container">
+                    <label>
+                        <input type="radio" name="q10" value="a">
+                        <span>a) accomodate</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q10" value="b">
+                        <span>b) accommodate</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q10" value="c">
+                        <span>c) acomodate</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="q10" value="d">
+                        <span>d) acommodate</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button id="prev-btn" class="btn-secondary" disabled>Previous</button>
+                <button id="next-btn" class="btn-primary">Next</button>
+                <button id="submit-btn" class="btn-primary">Submit</button>
+            </div>
+        </div>
+
+    <!-- Custom Modal for Warnings/Messages -->
+    <div id="warning-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Warning!</h3>
+            <p id="modal-message">Please answer all questions before submitting.</p>
+            <button id="modal-close-btn">OK</button>
+        </div>
+    </div>
+
+    <!-- Time's Up Modal (reusing the same overlay but with specific content) -->
+    <div id="time-up-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Time's Up!</h3>
+            <p id="time-up-message">Your time has run out. Your quiz will be submitted automatically.</p>
+            <button id="time-up-modal-close-btn">OK</button>
+        </div>
+    </div>
+</div>
+</body>
+
+    <script>
+        // Select all question sections in the document
+        const questionSections = document.querySelectorAll('.question-section');
+        // Get the total number of questions from the length of the NodeList
+        const totalQuestions = questionSections.length;
+        // Initialize the current question index to 0 (for the first question)
+        let currentQuestionIndex = 0;
+
+        // Get references to the navigation and action buttons
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+
+        // Get references to the custom warning modal elements
+        const warningModalOverlay = document.getElementById('warning-modal-overlay');
+        const modalMessage = document.getElementById('modal-message');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        // Get references to timer elements
+        const timeDisplay = document.getElementById('time');
+        let timeLeft = parseInt(timeDisplay.textContent); // Get initial time from HTML
+        let timerInterval; // Variable to store the interval ID
+
+        // Get references to the Time's Up modal elements
+        const timeUpModalOverlay = document.getElementById('time-up-modal-overlay');
+        const timeUpMessage = document.getElementById('time-up-message');
+        const timeUpModalCloseBtn = document.getElementById('time-up-modal-close-btn');
+
+        // --- IMPORTANT: ADDED correctAnswers dictionary for client-side evaluation ---
+        const correctAnswers = {
+            q1: 'c', // 15 * 8 = 120
+            q2: 'c', // Pervasive means widespread
+            q3: 'b', // 20% off $25 is $5 off, so $20
+            q4: 'c', // 'Beautifully' describes how she sings
+            q5: 'c', // Area = length * width = 12 * 5 = 60
+            q6: 'c', // 'went' is the past tense of 'go'
+            q7: 'a', // 2x + 5 = 15 => 2x = 10 => x = 5
+            q8: 'c', // 'Amazon' is a specific river name
+            q9: 'c', // 9 * 9 = 81
+            q10: 'b' // Correct spelling of 'accommodate'
+        };
+
+ 
+        function showQuestion(index) {
+            questionSections.forEach((section) => {
+                section.classList.remove('active');
+            });
+            questionSections[index].classList.add('active');
+
+            prevBtn.disabled = index === 0;
+
+            if (index === totalQuestions - 1) {
+                nextBtn.classList.add('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                showQuestion(currentQuestionIndex);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex);
+            }
+        }
+
+        function showModal(message, isTimeUp = false) {
+            if (isTimeUp) {
+                timeUpMessage.textContent = message;
+                timeUpModalOverlay.classList.add('show');
+            } else {
+                modalMessage.textContent = message;
+                warningModalOverlay.classList.add('show');
+            }
+        }
+
+        function hideModal(isTimeUp = false) {
+            if (isTimeUp) {
+                timeUpModalOverlay.classList.remove('show');
+            } else {
+                warningModalOverlay.classList.remove('show');
+            }
+        }
+
+        function disableQuizControls() {
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.disabled = true;
+            });
+            prevBtn.disabled = true;
+            nextBtn.disabled = true;
+            submitBtn.disabled = true;
+        }
+
+        function enableQuizControls() {
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.disabled = false;
+            });
+            prevBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.disabled = currentQuestionIndex === totalQuestions - 1;
+            submitBtn.disabled = false;
+        }
+
+        /**
+         * Handles quiz submission. Collects answers and submits them to the server via POST.
+         */
+        function submitQuiz() {
+            clearInterval(timerInterval); // Stop the timer when quiz is submitted
+            disableQuizControls(); // Disable controls immediately upon submission attempt
+
+            let allAnswered = true;
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '@Url.Action("SubmitQuiz", "Home")';
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionName = `q${i}`;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = `Answers[${questionName}]`;
+                hiddenInput.value = selectedOption ? selectedOption.value : '';
+                form.appendChild(hiddenInput);
+
+                if (!selectedOption) {
+                    allAnswered = false; // Mark if any question is unanswered
+                }
+            }
+
+            if (!allAnswered && !timeUpModalOverlay.classList.contains('show')) {
+                showModal('Please answer all questions before submitting.');
+                enableQuizControls();
+                startTimer();
+                return;
+            }
+
+            document.body.appendChild(form);
+            form.submit(); // THIS IS THE CRITICAL LINE THAT PERFORMS THE POST
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timeDisplay.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    disableQuizControls();
+                    showModal("Time's Up! Your quiz will be submitted automatically.", true);
+                    setTimeout(submitQuiz, 1500);
+                }
+            }, 1000);
+        }
+
+        // --- Event Listeners ---
+        prevBtn.addEventListener('click', prevQuestion);
+        nextBtn.addEventListener('click', nextQuestion);
+        submitBtn.addEventListener('click', submitQuiz);
+
+        modalCloseBtn.addEventListener('click', () => hideModal(false));
+        timeUpModalCloseBtn.addEventListener('click', () => hideModal(true));
+
+        warningModalOverlay.addEventListener('click', (event) => {
+            if (event.target === warningModalOverlay) {
+                hideModal(false);
+            }
+        });
+
+        timeUpModalOverlay.addEventListener('click', (event) => {
+            if (event.target === timeUpModalOverlay) {
+                hideModal(true);
+            }
+        });
+
+        window.onload = () => {
+            showQuestion(currentQuestionIndex);
+            startTimer();
+        };
+    </script>
+

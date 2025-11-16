@@ -1,0 +1,100 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+          <style>
+
+            .results-container {
+                background-color: #ffffff;
+                border-radius: 15px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                max-width: 600px;
+                width: 100%;
+                padding: 40px;
+                box-sizing: border-box;
+                text-align: center;
+                margin-left: 250px;
+            }
+
+                .results-container h2 {
+                    font-size: 2rem;
+                    font-weight: 700;
+                    color: #16a34a; /* Tailwind green-700 */
+                    margin-bottom: 20px;
+                }
+
+                .results-container p {
+                    font-size: 1.5rem;
+                    color: #555;
+                    margin-bottom: 30px;
+                }
+
+                .results-container button {
+                    background-color: #4f46e5;
+                    color: #ffffff;
+                    padding: 15px 35px;
+                    border: none;
+                    border-radius: 10px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: background-color 0.2s ease, transform 0.1s ease;
+                    font-size: 1.1rem;
+                }
+
+                    .results-container button:hover {
+                        background-color: #4338ca;
+                        transform: translateY(-2px);
+                    }
+                    p{
+                        font-size: 17px;
+                        font-weight: bold;
+                        margin-top: 20px;
+                        text-align: center;
+                    }
+          
+
+        </style>
+
+<body class="font-inter">
+    <div class="results-container">
+        <h2>Your Quiz Submit Successfully</h2>
+      
+        <p>You answered <span id="score-display">0</span> out of <span id="total-questions-display">0</span> questions correctly!</p>
+        <button id="retake-quiz-btn">HomePage</button>
+    </div>
+<p>Your answers has been submitting , you will receive a notification of admission through mail</p>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const score = urlParams.get('score');
+            const total = urlParams.get('total');
+
+           
+            const scoreDisplay = document.getElementById('score-display');
+            const totalQuestionsDisplay = document.getElementById('total-questions-display');
+            const retakeQuizBtn = document.getElementById('retake-quiz-btn');
+
+            
+            if (score !== null && total !== null) {
+                scoreDisplay.textContent = score;
+                totalQuestionsDisplay.textContent = total;
+            } else {
+               
+                scoreDisplay.textContent = 'N/A';
+                totalQuestionsDisplay.textContent = 'N/A';
+                
+                retakeQuizBtn.textContent = 'Go to Quiz';
+            }
+
+           
+            retakeQuizBtn.addEventListener('click', () => {
+               
+                window.location.href = '/';
+            });
+        });
+    </script>
+</body>
+
+
+                  

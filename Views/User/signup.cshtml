@@ -1,0 +1,157 @@
+﻿@model SmartQuiz_APP.Models.login_signup
+@{
+    ViewData["Title"] = "Signup";
+    Layout = null;
+}
+
+<div class="signup">
+    <div class="logo">
+        <h1>SmartQuiz APP</h1>
+    </div>
+    <h2>Sign Up</h2>
+    <form asp-action="Signup" asp-controller="User" method="post">
+        @Html.AntiForgeryToken() @* CRITICAL: Anti-Forgery Token for security *@
+
+        <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+        <label>First Name</label>
+        <input id="signup-fname" type="text" name="First_Name" placeholder="First Name" required />
+
+        <label>Last Name</label>
+        <input id="signup-lname" type="text" name="Last_Name" placeholder="Last Name" required />
+
+        <label>Email</label>
+        <input id="signup-email" type="email" name="Email" placeholder="you@example.com" required />
+
+        <label>Roll No</label>
+        <input id="signup-rollno" type="password" name="Roll_no" placeholder="********" required />
+
+        <button type="submit">Sign Up</button>
+    </form>
+    <p class="footer">Already have an account? <a asp-controller="User" asp-action="login">Login here</a></p>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("https://cdn.pixabay.com/photo/2023/12/03/17/33/login-8427911_1280.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
+
+    .signup {
+        background: rgba(255 255 255 / 0.1);
+        backdrop-filter: blur(12px);
+        border-radius: 16px;
+        box-shadow: 0 16px 40px rgba(6, 182, 212, 0.3);
+        max-width: 400px;
+        width: 100%;
+        padding: 32px 36px;
+        margin-left: 100px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+
+    .logo {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+        .logo h1 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: 35px;
+            letter-spacing: 1.2px;
+            color: #e0f2fe;
+            text-shadow: 0 2px 8px red;
+        }
+
+    h2 {
+        margin-bottom: 24px;
+        font-weight: 700;
+        font-size: 1.8rem;
+        text-align: center;
+        color: #e0f2fe;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #dbeafe;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: none;
+        background: rgba(255 255 255 / 0.15);
+        color: #f9fafb;
+        font-size: 1rem;
+        margin-bottom: 18px;
+        transition: background-color 0.3s ease;
+        outline-offset: 2px;
+    }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            background: rgba(255 255 255 / 0.3);
+        }
+
+    button {
+        width: 100%;
+        background: #666;
+        color: #e0f2fe;
+        padding: 14px 0;
+        border-radius: 16px;
+        border: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        cursor: pointer;
+        box-shadow: 0 8px 24px rgba(6, 182, 212, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        button:hover {
+            transform: scale(1.03);
+            background: #000;
+            box-shadow: 2px 2px 5px #fff;
+        }
+
+    .footer {
+        margin-top: 16px;
+        font-size: 16px;
+        text-align: center;
+        color: white;
+    }
+
+        .footer a {
+            text-decoration: none;
+            color: #fff;
+            transition: color 0.3s ease;
+        }
+
+            .footer a:hover {
+               
+                color: red;
+            }
+
+
+</style>

@@ -1,0 +1,152 @@
+﻿@model SmartQuiz_APP.Models.login_signup
+@{
+    ViewData["Title"] = "Login & Signup";
+    Layout = null;  
+}
+
+
+<div class="login">
+    <div class="logo">
+        <h1>SmartQuiz APP</h1>
+    </div>
+    <h2>Login</h2>
+    <form asp-action="Login" asp-controller="User" method="post">
+
+        @* Anti-Forgery Token for security *@
+        @Html.AntiForgeryToken() 
+
+        <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+
+        <label>Email</label>
+        <input id="login-email" type="email" name="Email" placeholder="Enter Email" required />
+        <label>Roll no</label>
+        <input id="login-rollno" type="password" name="Roll_no" placeholder="********" required />
+        <button type="submit">Log In</button>
+    </form>
+    <p class="footer">Don't have an account? <a asp-controller="User" asp-action="signup">Sign up here</a></p>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+    body 
+    {
+        background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),url( "https://cdn.pixabay.com/photo/2018/11/29/21/51/social-media-3846597_1280.png");
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
+
+        
+
+    .logo {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+        .logo h1 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: 35px;
+            letter-spacing: 1.2px;
+            color: #fff;
+            text-shadow: 0 2px 8px red;
+        }
+
+        .login {
+            background: rgba(255 255 255 / 0.0);
+            backdrop-filter: blur(9px);
+            border-radius: 16px;
+            box-shadow: 0 16px 40px #888;
+            max-width: 400px;
+            width: 100%;
+            padding: 32px 36px;
+            margin-left: 440px;
+            margin-top: 60px;
+        }
+
+        h2 {
+            margin-bottom: 24px;
+            font-weight: 700;
+            font-size: 1.8rem;
+            text-align: center;
+            color: #fff;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 17px;
+            color: #fff;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255 255 255 / 0.30);
+            color: #f9fafb;
+            font-size: 1rem;
+            margin-bottom: 18px;
+            transition: background-color 0.3s ease;
+            outline-offset: 2px;
+        }
+
+            input[type="email"]:focus,
+            input[type="password"]:focus {
+                background: rgba(255 255 255 / 0.3);
+            }
+
+        button {
+            width: 100%;
+            background: rgba(255 255 255 / 0.3);
+            color: #fff;
+            padding: 14px 0;
+            border-radius: 16px;
+            border: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            button:hover {
+                transform: scale(1.03);
+                box-shadow: 0 2px 2px #fff;
+                background-color: #000;
+            }
+
+        .footer {
+            margin-top: 16px;
+            font-size: 16px;
+            text-align: center;
+            color: #fff;
+        }
+
+            .footer a {
+                text-decoration: none;
+                color: white;
+            }
+
+                .footer a:hover {
+                color: red;
+                }
+
+        
+    </style>

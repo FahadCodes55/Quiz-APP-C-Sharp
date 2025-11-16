@@ -1,0 +1,38 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:5194", // Adjust port if yours is different
+      "sslPort": 44322 // Adjust port if yours is different
+    }
+  },
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:5194", // Match applicationUrl from iisSettings or your preference
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development" // <<< CRITICAL: ENSURE THIS IS "Development"
+      }
+    },
+    "https": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "https://localhost:7128;http://localhost:5194", // Match your HTTPS/HTTP ports
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development" // <<< CRITICAL: ENSURE THIS IS "Development"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development" // <<< CRITICAL: ENSURE THIS IS "Development"
+      }
+    }
+  }
+}
